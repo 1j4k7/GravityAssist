@@ -1,6 +1,6 @@
 build/
 *.dylib
-nbproject/
+
 
 # CDT-specific
 .cproject
