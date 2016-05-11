@@ -22,7 +22,7 @@ import java.util.logging.Level;
 public class Main extends SimpleApplication {
     private BulletAppState bulletAppState;
     private static final Logger logger = Logger.getLogger(Main.class);
-    
+
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -33,9 +33,9 @@ public class Main extends SimpleApplication {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().setGravity(Vector3f.ZERO);
-        
+
         createWalls();
-        createObjects(100);
+        createObjects(1000);
 
         PointLight lamp_light = new PointLight();
         lamp_light.setColor(ColorRGBA.Yellow);
@@ -43,7 +43,7 @@ public class Main extends SimpleApplication {
         rootNode.addLight(lamp_light);
         flyCam.setMoveSpeed(20);
     }
-    
+
     /**
      * creates the bounds of the rooms, using 6 boxes of mass 0
      * north is Z+, east is X-, top is Y+
@@ -73,9 +73,10 @@ public class Main extends SimpleApplication {
         RigidBodyControl roomPhy = new RigidBodyControl(0f);
         roomNode.addControl(roomPhy);
         bulletAppState.getPhysicsSpace().add(roomPhy);
+        roomPhy.setRestitution(1);
         rootNode.attachChild(roomNode);
     }
-    
+
     /**
      * randomely generates objects inside the room
      */
@@ -91,11 +92,12 @@ public class Main extends SimpleApplication {
             control = new RigidBodyControl(1f);
             obj.addControl(control);
             bulletAppState.getPhysicsSpace().add(control);
-            control.setLinearVelocity(randomVector());
+            control.setLinearVelocity(randomVector().mult(10));
+            control.setRestitution(1);
             rootNode.attachChild(obj);
         }
     }
-    
+
     public static Vector3f randomVector() {
         return new Vector3f(FastMath.rand.nextFloat()*2-1,FastMath.rand.nextFloat()*2-1,FastMath.rand.nextFloat()*2-1).normalize();
     }
