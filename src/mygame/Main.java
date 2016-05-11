@@ -35,7 +35,7 @@ public class Main extends SimpleApplication {
         bulletAppState.getPhysicsSpace().setGravity(Vector3f.ZERO);
         
         createWalls();
-        createObjects(100);
+        createObjects(1000);
 
         PointLight lamp_light = new PointLight();
         lamp_light.setColor(ColorRGBA.Yellow);
@@ -72,6 +72,7 @@ public class Main extends SimpleApplication {
         roomNode.attachChild(bottomWall);
         RigidBodyControl roomPhy = new RigidBodyControl(0f);
         roomNode.addControl(roomPhy);
+        roomPhy.setRestitution(1f);
         bulletAppState.getPhysicsSpace().add(roomPhy);
         rootNode.attachChild(roomNode);
     }
@@ -91,7 +92,8 @@ public class Main extends SimpleApplication {
             control = new RigidBodyControl(1f);
             obj.addControl(control);
             bulletAppState.getPhysicsSpace().add(control);
-            control.setLinearVelocity(randomVector());
+            control.setLinearVelocity(randomVector().mult(3f));
+            control.setRestitution(1f);
             rootNode.attachChild(obj);
         }
     }
