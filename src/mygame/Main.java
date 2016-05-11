@@ -38,7 +38,7 @@ public class Main extends SimpleApplication {
         createObjects(1000);
 
         PointLight lamp_light = new PointLight();
-        lamp_light.setColor(ColorRGBA.Yellow);
+        lamp_light.setColor(ColorRGBA.White);
         lamp_light.setRadius(1000f);
         rootNode.addLight(lamp_light);
         flyCam.setMoveSpeed(20);
@@ -51,7 +51,8 @@ public class Main extends SimpleApplication {
     public void createWalls() {
         Node roomNode = new Node();
         Material wallMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        wallMat.setTexture("Diffuse", assetManager.loadTexture("Textures/BrickWall_diffuse.jpg"));
+        wallMat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/BrickWall_diffuse.jpg"));
+        //wallMat.setTexture("NormalMap", assetManager.loadTexture("Textures/BrickWall_normal.jpg"));
         Geometry northWall = new Geometry("North Wall", new Box(100, 100, 1));
         northWall.move(0, 0, 100).setMaterial(wallMat);
         roomNode.attachChild(northWall);
