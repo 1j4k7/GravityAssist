@@ -74,7 +74,6 @@ public class Main extends SimpleApplication {
         roomNode.addControl(roomPhy);
         roomPhy.setRestitution(1f);
         bulletAppState.getPhysicsSpace().add(roomPhy);
-        roomPhy.setRestitution(1);
         rootNode.attachChild(roomNode);
     }
 
