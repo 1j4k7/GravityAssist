@@ -12,6 +12,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Sphere;
 import com.sun.istack.internal.logging.Logger;
 import java.util.logging.Level;
 
@@ -35,7 +36,8 @@ public class Main extends SimpleApplication {
         bulletAppState.getPhysicsSpace().setGravity(Vector3f.ZERO);
 
         createWalls();
-        createObjects(1000);
+        createBoxes(1000);
+        createBlocks(50);
 
         PointLight lamp_light = new PointLight();
         lamp_light.setColor(ColorRGBA.White);
@@ -43,7 +45,7 @@ public class Main extends SimpleApplication {
         rootNode.addLight(lamp_light);
         flyCam.setMoveSpeed(20);
     }
-
+    
     /**
      * creates the bounds of the rooms, using 6 boxes of mass 0
      * north is Z+, east is X-, top is Y+
@@ -51,7 +53,7 @@ public class Main extends SimpleApplication {
     public void createWalls() {
         Node roomNode = new Node();
         Material wallMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        wallMat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/BrickWall_diffuse.jpg"));
+        wallMat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/StarBackground.jpg"));
         //wallMat.setTexture("NormalMap", assetManager.loadTexture("Textures/BrickWall_normal.jpg"));
         Geometry northWall = new Geometry("North Wall", new Box(100, 100, 1));
         northWall.move(0, 0, 100).setMaterial(wallMat);
@@ -81,14 +83,17 @@ public class Main extends SimpleApplication {
     /**
      * randomely generates objects inside the room
      */
-    public void createObjects(int count) {
+    public void createBoxes(int count) {
         Geometry obj;
+        Material mat;
         Box objBounds = new Box(1f, 1f, 1f);
         RigidBodyControl control;
         float x, y, z;
         for (int i = 0; i < count; i++) {
             obj = new Geometry("Box " + i, objBounds);
-            obj.setMaterial(new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"));
+            mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+            mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Plastic.jpg"));
+            obj.setMaterial(mat);
             obj.setLocalTranslation(randomVector().mult(90));
             control = new RigidBodyControl(1f);
             obj.addControl(control);
@@ -99,6 +104,26 @@ public class Main extends SimpleApplication {
         }
     }
 
+    public void createBlocks(int count) {
+        Geometry obj;
+        Material mat;
+        Box objBounds = new Box(8f, 8f,8f);
+        RigidBodyControl control;
+        float x, y, z;
+        for (int i = 0; i < count; i++){
+            obj = new Geometry("Block "+i, objBounds);
+            mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+            mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/IronTexture.jpg"));
+            obj.setMaterial(mat);
+            obj.setLocalTranslation(randomVector().mult(85));
+            control = new RigidBodyControl(0);
+            obj.addControl(control);
+            bulletAppState.getPhysicsSpace().add(control);
+            control.setRestitution(1f);
+            rootNode.attachChild(obj);
+        }
+    }
+    
     public static Vector3f randomVector() {
         return new Vector3f(FastMath.rand.nextFloat()*2-1,FastMath.rand.nextFloat()*2-1,FastMath.rand.nextFloat()*2-1).normalize();
     }
